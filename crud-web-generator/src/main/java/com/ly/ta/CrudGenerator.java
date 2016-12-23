@@ -173,7 +173,7 @@ public class CrudGenerator {
     }
 
     private List<Map<String, Object>> initPersistenceInfo(Object em) throws ClassNotFoundException {
-        //        Set<EntityType<?>> allEntities = em.getMetamodel().getEntities();
+//                Set<EntityType<?>> allEntities = em.getMetamodel().getEntities();
 
         Map<String, Object> entityInfo;
         List<Map<String, Object>> entities = new ArrayList<Map<String, Object>>();
