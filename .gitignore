@@ -1,0 +1,8 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea
+*/target/
+**/*.iml
+**/.DS_Store
+**/._.DS_Store
+target/
+admin/cache/
