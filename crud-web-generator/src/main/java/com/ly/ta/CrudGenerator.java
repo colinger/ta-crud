@@ -1,5 +1,6 @@
 package com.ly.ta;
 
+import com.ly.ta.tool.JdbcUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -15,10 +16,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.sql.SQLException;
+import java.util.*;
 
 public class CrudGenerator {
 
@@ -41,7 +40,7 @@ public class CrudGenerator {
 
         this.restUrl = restUrl;
 
-        List<Map<String, Object>> entities = initPersistenceInfo(null);
+        List<Map<String, Object>> entities = initPersistenceInfo("ta_admin_user");
 
         File root = new File(destDirRelativePath);
         root.delete();
@@ -51,9 +50,9 @@ public class CrudGenerator {
 
         ve.init();
 
-        generateAppAndSrvJS(ve, entities, root);
-
-        generateControllersAndModulesJS(ve, entities, root);
+//        generateAppAndSrvJS(ve, entities, root);
+//
+//        generateControllersAndModulesJS(ve, entities, root);
 
         generateHTML(ve, entities, root);
 
@@ -73,8 +72,8 @@ public class CrudGenerator {
         }
     }
 
-    private void generateAppAndSrvJS(VelocityEngine ve, List<Map<String, Object>> entities, File root) throws IOException, ResourceNotFoundException, ParseErrorException,
-                                                                                                       URISyntaxException {
+    private void generateAppAndSrvJS(VelocityEngine ve, List<Map<String, Object>> entities, File root) throws IOException, ResourceNotFoundException,
+                                                                                                       ParseErrorException, URISyntaxException {
         File js = new File(root, "js");
         if (!js.exists())
             js.mkdir();
@@ -172,83 +171,31 @@ public class CrudGenerator {
         }
     }
 
-    private List<Map<String, Object>> initPersistenceInfo(Object em) throws ClassNotFoundException {
-//                Set<EntityType<?>> allEntities = em.getMetamodel().getEntities();
-
+    private List<Map<String, Object>> initPersistenceInfo(String commandName) throws ClassNotFoundException {
+        JdbcUtils jdbcUtils = new JdbcUtils();
+        List<FieldInfo> fieldInfoList = null;
+        try {
+            fieldInfoList = jdbcUtils.test(commandName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        commandName = StringUtils.camelName(commandName);
         Map<String, Object> entityInfo;
         List<Map<String, Object>> entities = new ArrayList<Map<String, Object>>();
-        //        for (EntityType et : allEntities) {
-        //            Class clazz = et.getJavaType();
-        //            if (ReflectionUtils.isEntityExposed(clazz)) {
-        //                entityInfo = new HashMap<String, Object>();
-        //                entities.add(entityInfo);
-        //                String name = clazz.getSimpleName();
-        //                entityInfo.put("name", name);
-        //                entityInfo.put("uncapitName", name.substring(0, 1).toLowerCase() + name.substring(1));
-        //                entityInfo.put("pluralName", StringUtils.plural(name));
-        //                List<Field> fields = ReflectionUtils.getAllFields(clazz);
-        //                List<FieldInfo> fieldInfoList = new ArrayList<FieldInfo>();
-        //                boolean hasLink = false;
-        //                boolean hasColl = false;
-        //                for (Field f : fields) {
-        //                    FieldInfo fi = null;
-        //                    if (f.isAnnotationPresent(OneToMany.class) || f.isAnnotationPresent(ManyToMany.class)) {
-        //                        fi = new FieldInfo(f.getName(), ReflectionUtils.getGenericCollectionType(f), true, false);
-        //                        hasColl = true;
-        //                    } else if (f.isAnnotationPresent(ManyToOne.class) || f.isAnnotationPresent(OneToOne.class)) {
-        //                        fi = new FieldInfo(f.getName(), f.getType().getSimpleName(), false, true);
-        //                        hasLink = true;
-        //                    } else if (!f.isAnnotationPresent(Id.class) && !f.isAnnotationPresent(Version.class)) {
-        //                        fi = new FieldInfo(f.getName(), f.getType().getSimpleName(), false, false);
-        //                    }
-        //                    if (fi != null) {
-        //                        fieldInfoList.add(fi);
-        //                        if (f.isAnnotationPresent(NotNull.class))
-        //                            fi.setNotNull(true);
-        //                        if (f.isAnnotationPresent(Size.class)) {
-        //                            Size size = f.getAnnotation(Size.class);
-        //                            fi.setSizeMax(size.max());
-        //                            fi.setSizeMin(size.min());
-        //                        } else if (f.isAnnotationPresent(Digits.class)) {
-        //                            Digits d = f.getAnnotation(Digits.class);
-        //                            fi.setSizeMax(d.integer() + (d.fraction() > 0 ? 1 + d.fraction() : 0));
-        //                            double max = (Math.pow(10, d.integer())) - (d.fraction() == 0 ? 1 : Math.pow(10, -1 * d.fraction()));
-        //                            fi.setStep((d.fraction() == 0 ? 1 : Math.pow(10, -1 * d.fraction())));
-        //                            fi.setMax(max);
-        //                        }
-        //                        if (f.isAnnotationPresent(Column.class)) {
-        //                            Column col = f.getAnnotation(Column.class);
-        //                            if (col.unique())
-        //                                fi.setUnique(true);
-        //                            if (!col.nullable())
-        //                                fi.setNotNull(true);
-        //                            if (fi.getSizeMax() == 255)
-        //                                fi.setSizeMax(col.length());
-        //                        }
-        //                        if (Number.class.isAssignableFrom(f.getType())
-        //                            || (f.getType().isPrimitive()
-        //                                && (f.getType().equals(int.class) || f.getType().equals(double.class) || f.getType().equals(long.class) || f.getType().equals(short.class)))) {
-        //                            fi.setNumber(true);
-        //                            if (f.isAnnotationPresent(Max.class))
-        //                                fi.setMax(Double.valueOf((f.getAnnotation(Max.class)).value()));
-        //                            if (f.isAnnotationPresent(Min.class))
-        //                                fi.setMin(Double.valueOf((f.getAnnotation(Min.class)).value()));
-        //                            if (f.isAnnotationPresent(DecimalMax.class))
-        //                                fi.setMax(Double.valueOf((f.getAnnotation(DecimalMax.class)).value()));
-        //                            if (f.isAnnotationPresent(DecimalMin.class))
-        //                                fi.setMin(Double.valueOf((f.getAnnotation(DecimalMin.class)).value()));
-        //
-        //                        }
-        //
-        //                    }
-        //                }
-        //                Collections.sort(fieldInfoList, (p1, p2) -> p1.getName().compareTo(p2.getName()));
-        //                entityInfo.put("info", fieldInfoList);
-        //                entityInfo.put("hasLinks", hasLink);
-        //                entityInfo.put("hasCollections", hasColl);
-        //            }
-        //
-        //        }
+        {
+            entityInfo = new HashMap<>();
+            entities.add(entityInfo);
+            String name = commandName;
+            entityInfo.put("name", name);
+            entityInfo.put("uncapitName", name.substring(0, 1).toLowerCase() + name.substring(1));
+            entityInfo.put("pluralName", StringUtils.plural(name));
+            boolean hasLink = false;
+            boolean hasColl = false;
+            Collections.sort(fieldInfoList, (p1, p2) -> p1.getName().compareTo(p2.getName()));
+            entityInfo.put("info", fieldInfoList);
+            entityInfo.put("hasLinks", hasLink);
+            entityInfo.put("hasCollections", hasColl);
+        }
         Collections.sort(entities, (p1, p2) -> ((String) p1.get("name")).compareTo((String) p2.get("name")));
         return entities;
     }

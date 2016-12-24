@@ -1,5 +1,7 @@
 package com.ly.ta;
 
+import com.ly.ta.tool.TaString;
+
 public class FieldInfo {
 
     private String  name;
@@ -21,10 +23,25 @@ public class FieldInfo {
         super();
         this.name = name;
         this.capitName = name.substring(0, 1).toUpperCase() + name.substring(1);
-        this.type = type;
+        this.type = parse(type);
         this.collection = collection;
         this.link = link;
         this.uncapitType = type.substring(0, 1).toLowerCase() + type.substring(1);
+    }
+
+    private String parse(String type) {
+        switch (TaString.getType(type)) {
+            case bigint:
+                return "long";
+            case varchar:
+                return "String";
+            case datetime:
+                return "Date";
+            case tinybit:
+                return "String";
+            default:
+                return "String";
+        }
     }
 
     public String getName() {

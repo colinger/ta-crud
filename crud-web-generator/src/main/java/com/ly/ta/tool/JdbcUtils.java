@@ -4,7 +4,11 @@
  */
 package com.ly.ta.tool;
 
+import com.ly.ta.FieldInfo;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author gxy23996
@@ -12,13 +16,13 @@ import java.sql.*;
  */
 public class JdbcUtils {
     //数据库用户名
-    private static final String USERNAME = "tcstpermission";
+    private static final String USERNAME = "root";                            //"tcstpermission";
     //数据库密码
-    private static final String PASSWORD = "oTdXfRYDS3TDv2tRZ3PR";
+    private static final String PASSWORD = "admin";                           //"oTdXfRYDS3TDv2tRZ3PR";
     //驱动信息
     private static final String DRIVER   = "com.mysql.jdbc.Driver";
     //数据库地址
-    private static final String URL      = "jdbc:mysql://10.100.158.93:3500/TCSmartTravelPermission";
+    private static final String URL      = "jdbc:mysql://localhost:3306/test";;//"jdbc:mysql://10.100.158.93:3500/TCSmartTravelPermission";
     private Connection          connection;
     private PreparedStatement   pstmt;
     private ResultSet           resultSet;
@@ -47,17 +51,21 @@ public class JdbcUtils {
         return connection;
     }
 
-    public void test(String table) throws SQLException {
+    public List<FieldInfo> test(String table) throws SQLException {
+        List<FieldInfo> fieldInfoList = new ArrayList<>();
         try {
             PreparedStatement pstm = connection
-                .prepareStatement("SELECT a.COLUMN_NAME,a.COLUMN_COMMENT FROM information_schema.`COLUMNS` a WHERE  a" + ".TABLE_NAME='" + table + "'");
+                .prepareStatement("SELECT a.COLUMN_NAME,a.DATA_TYPE, a.COLUMN_COMMENT FROM information_schema.`COLUMNS` a WHERE  a" + ".TABLE_NAME='" + table + "'");
             resultSet = pstm.executeQuery();
             while (resultSet.next()) {
                 System.out.println(resultSet.getString(1) + ":" + resultSet.getString(2));
+                FieldInfo fieldInfo = new FieldInfo(resultSet.getString(1), resultSet.getString(2), false, false);
+                fieldInfoList.add(fieldInfo);
             }
         } finally {
             releaseConn();
         }
+        return fieldInfoList;
     }
 
     /**
