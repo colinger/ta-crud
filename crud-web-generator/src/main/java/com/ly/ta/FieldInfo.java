@@ -4,8 +4,15 @@ import com.ly.ta.tool.TaString;
 
 public class FieldInfo {
 
+    private int     order;
+    private String  label;
+    private String  idTag;
+    private String  description;
+    private boolean required;
     private String  name;
     private String  type;
+
+    //
     private String  uncapitType;
     private boolean collection;
     private boolean link;
@@ -18,6 +25,16 @@ public class FieldInfo {
     private Double  max     = null;
     private Double  min     = null;
     private Double  step    = null;
+
+    public FieldInfo(String name, String type) {
+        super();
+        this.name = name;
+        this.capitName = name.substring(0, 1).toUpperCase() + name.substring(1);
+        this.type = type;
+        this.collection = false;
+        this.link = false;
+        this.uncapitType = type.substring(0, 1).toLowerCase() + type.substring(1);
+    }
 
     public FieldInfo(String name, String type, boolean collection, boolean link) {
         super();
@@ -37,7 +54,7 @@ public class FieldInfo {
                 return "String";
             case datetime:
                 return "Date";
-            case tinybit:
+            case tinyint:
                 return "String";
             default:
                 return "String";
@@ -166,5 +183,45 @@ public class FieldInfo {
 
     public boolean getIsStep() {
         return step != null;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getIdTag() {
+        return idTag;
+    }
+
+    public void setIdTag(String idTag) {
+        this.idTag = idTag;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isRequired() {
+        return required;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 }

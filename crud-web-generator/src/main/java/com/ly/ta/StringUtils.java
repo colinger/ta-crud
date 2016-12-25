@@ -33,6 +33,10 @@ public class StringUtils {
     }
 
     public static String camelName(String name) {
+        return camelName(name, true);
+    }
+
+    public static String camelName(String name, boolean headerLower) {
         StringBuilder result = new StringBuilder();
         // 快速检查
         if (name == null || name.isEmpty()) {
@@ -40,7 +44,7 @@ public class StringUtils {
             return "";
         } else if (!name.contains("_")) {
             // 不含下划线，仅将首字母小写
-            return name.substring(0, 1).toLowerCase() + name.substring(1);
+            return headerLower ? name.substring(0, 1).toLowerCase() : name.substring(0, 1).toUpperCase() + name.substring(1);
         }
         // 用下划线将原始字符串分割
         String camels[] = name.split("_");
@@ -52,7 +56,7 @@ public class StringUtils {
             // 处理真正的驼峰片段
             if (result.length() == 0) {
                 // 第一个驼峰片段，全部字母都小写
-                result.append(camel.toLowerCase());
+                result.append(headerLower ? camel.toLowerCase() : camel.toUpperCase());
             } else {
                 // 其他的驼峰片段，首字母大写
                 result.append(camel.substring(0, 1).toUpperCase());

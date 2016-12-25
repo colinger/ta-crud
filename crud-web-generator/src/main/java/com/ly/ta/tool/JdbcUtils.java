@@ -4,6 +4,7 @@
  */
 package com.ly.ta.tool;
 
+import com.ly.ta.CrudGenerator;
 import com.ly.ta.FieldInfo;
 
 import java.sql.*;
@@ -22,7 +23,7 @@ public class JdbcUtils {
     //驱动信息
     private static final String DRIVER   = "com.mysql.jdbc.Driver";
     //数据库地址
-    private static final String URL      = "jdbc:mysql://localhost:3306/test";;//"jdbc:mysql://10.100.158.93:3500/TCSmartTravelPermission";
+    private static final String URL      = "jdbc:mysql://localhost:3306/test";//"jdbc:mysql://10.100.158.93:3500/TCSmartTravelPermission";
     private Connection          connection;
     private PreparedStatement   pstmt;
     private ResultSet           resultSet;
@@ -53,6 +54,7 @@ public class JdbcUtils {
 
     public List<FieldInfo> test(String table) throws SQLException {
         List<FieldInfo> fieldInfoList = new ArrayList<>();
+        this.getConnection();
         try {
             PreparedStatement pstm = connection
                 .prepareStatement("SELECT a.COLUMN_NAME,a.DATA_TYPE, a.COLUMN_COMMENT FROM information_schema.`COLUMNS` a WHERE  a" + ".TABLE_NAME='" + table + "'");
@@ -86,9 +88,12 @@ public class JdbcUtils {
      */
     public static void main(String[] args) throws SQLException {
         // TODO Auto-generated method stub
-        JdbcUtils jdbcUtils = new JdbcUtils();
-        jdbcUtils.getConnection();
-        jdbcUtils.test("ta_admin_user");
+
+        try {
+            new CrudGenerator().generate("ta_admin_user", "/Users/colingo/Documents/data/", "");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 }

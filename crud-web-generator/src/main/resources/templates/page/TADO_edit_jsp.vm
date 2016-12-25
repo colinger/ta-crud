@@ -1,0 +1,82 @@
+#set( $_= "$" )
+##--------------------------------------------------------------------------------------------------------
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="common" uri="http://ta.ly.com/common/" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<jsp:useBean id="webUtil" class="com.ly.ta.web.common.util.WebUtil"></jsp:useBean>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8" %>
+<c:set var="context" value="${pageContext.request.contextPath}"/>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>${pageTitle}</title>
+    <link rel="stylesheet" href="${context}/js/element-ui/lib/theme-default/index.css">
+    <style type="text/css">
+        .ta-input {
+            width: 300px;
+        }
+
+        .ta-textarea {
+            width: 350px;
+        }
+
+        .el-upload__input {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+<breadcrumb>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>首页</a></li>
+        <li class="active">${pageTitle}</li>
+    </ol>
+</breadcrumb>
+<div class="row">
+    <div class="col-md-12">
+        <form:form commandName="${commandName}" method="post" cssClass="form-horizontal" action="">
+            <form:hidden path="id"/>
+            <div class="box-body box box-info">
+                <fieldset>
+                    <taTag:errors path="*" innerElement="span" innerElementCssClass="ta_error"
+                                  cssClass="alert alert-info alert-dismissable"/>
+                    <br>
+                    #foreach( $info in ${entity.info} )
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">${info.label} #if(${info.required})<span class="required">*</span>#end<</label>
+                            <div class="col-sm-3">
+                                <form:input path="${info.name}" id="${info.idTag} " cssClass="form-control"
+                                            autocomplete="false"/>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="control-label"> <span class="required">${info.description} </span></label>
+                            </div>
+                        </div>
+                    #end
+                    <div class="">
+                        <div class="col-sm-6">
+                            <input type="submit" class="btn btn-info pull-right" value="保存"/>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </form:form>
+    </div>
+</div>
+<footerScript>
+    <script src="${context}/js/vue2.js"></script>
+    <script src="${context}/js/element-ui/lib/index.js"></script>
+    <script src="${context}/js/public.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+
+        });
+    </script>
+</footerScript>
+</body>
+</html>

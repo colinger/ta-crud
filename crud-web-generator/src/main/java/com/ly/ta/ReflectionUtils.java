@@ -4,11 +4,14 @@
  */
 package com.ly.ta;
 
+import com.ly.ta.annotation.TaCrud;
+
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,12 +24,12 @@ public class ReflectionUtils {
     }
 
     private static List<Field> getAllFields(List<Field> fields, Class<?> type) {
-        //        if (type.isAnnotationPresent(Entity.class) || type.isAnnotationPresent(MappedSuperclass.class)) {
-        //            fields.addAll(Arrays.asList(type.getDeclaredFields()));
-        //            if (type.getSuperclass() != null) {
-        //                return getAllFields(fields, type.getSuperclass());
-        //            }
-        //        }
+        if (type.isAnnotationPresent(TaCrud.class)) {
+            fields.addAll(Arrays.asList(type.getDeclaredFields()));
+            if (type.getSuperclass() != null) {
+                return getAllFields(fields, type.getSuperclass());
+            }
+        }
 
         return fields;
     }

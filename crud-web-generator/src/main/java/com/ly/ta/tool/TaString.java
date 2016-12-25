@@ -9,7 +9,7 @@ package com.ly.ta.tool;
  * @version $Id: TaString.java, v0.1 24/12/2016 colingo Exp $$
  */
 public enum TaString {
-                      bigint, varchar, datetime, tinybit;
+                      bigint, varchar, datetime, tinyint;
     public static TaString getType(String type) {
         return valueOf(type.toLowerCase());
     }
