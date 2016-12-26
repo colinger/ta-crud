@@ -96,7 +96,7 @@ public class CrudGenerator {
         VelocityContext context = new VelocityContext();
         for (Map<String, Object> map : entities) {
             String name = (String) map.get("name");
-            File dir = new File(partials, name.toLowerCase());
+            File dir = new File(partials, "");
             if (!dir.exists())
                 dir.mkdir();
             context.put("entity", map);
@@ -122,14 +122,14 @@ public class CrudGenerator {
             writer.close();
         }
 
-        Template indexTemplate = ve.getTemplate(getResourceFile("page/index_html.vm"));
-        context = new VelocityContext();
-        context.put("entities", entities);
-        Path path = Paths.get(root.getPath(), "index.html");
-        System.out.println("File " + path);
-        BufferedWriter writer = Files.newBufferedWriter(path);
-        indexTemplate.merge(context, writer);
-        writer.close();
+        //        Template indexTemplate = ve.getTemplate(getResourceFile("page/index_html.vm"));
+        //        context = new VelocityContext();
+        //        context.put("entities", entities);
+        //        Path path = Paths.get(root.getPath(), "index.html");
+        //        System.out.println("File " + path);
+        //        BufferedWriter writer = Files.newBufferedWriter(path);
+        //        indexTemplate.merge(context, writer);
+        //        writer.close();
 
     }
 
