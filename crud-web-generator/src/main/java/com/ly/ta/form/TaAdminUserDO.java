@@ -4,6 +4,7 @@
  */
 package com.ly.ta.form;
 
+import com.ly.ta.annotation.InputType;
 import com.ly.ta.annotation.TaCrud;
 import com.ly.ta.annotation.TaCrudInfo;
 
@@ -43,5 +44,7 @@ public class TaAdminUserDO implements java.io.Serializable {
 	@TaCrudInfo(order = 2, label = "邮箱", path= "email", desc = "限50个字符内")
 	private String email;
 
+	@TaCrudInfo(order = 3, label = "适应范围", path= "scope", inputType = InputType.RADIO)
+	private String scope;
 }
 

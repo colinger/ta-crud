@@ -28,4 +28,6 @@ public @interface TaCrudInfo {
     boolean required() default true;//是否必填
 
     String desc() default "";//说明：限15个字
+
+    InputType inputType() default InputType.INPUT;//输入类型
 }

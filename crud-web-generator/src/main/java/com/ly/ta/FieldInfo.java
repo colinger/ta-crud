@@ -1,30 +1,31 @@
 package com.ly.ta;
 
-import com.ly.ta.tool.TaString;
+import com.ly.ta.annotation.InputType;
 
 public class FieldInfo {
 
-    private int     order;
-    private String  label;
-    private String  idTag;
-    private String  description;
-    private boolean required;
-    private String  name;
-    private String  type;
+    private int       order;
+    private String    label;
+    private String    idTag;
+    private String    description;
+    private boolean   required;
+    private String    name;
+    private String    type;
+    private InputType inputType;
 
     //
-    private String  uncapitType;
-    private boolean collection;
-    private boolean link;
-    private String  capitName;
-    private boolean notNull = false;
-    private int     sizeMax = 255;
-    private int     sizeMin = 0;
-    private boolean unique  = false;
-    private boolean number  = false;
-    private Double  max     = null;
-    private Double  min     = null;
-    private Double  step    = null;
+    private String    uncapitType;
+    private boolean   collection;
+    private boolean   link;
+    private String    capitName;
+    private boolean   notNull = false;
+    private int       sizeMax = 255;
+    private int       sizeMin = 0;
+    private boolean   unique  = false;
+    private boolean   number  = false;
+    private Double    max     = null;
+    private Double    min     = null;
+    private Double    step    = null;
 
     public FieldInfo(String name, String type) {
         super();
@@ -36,30 +37,6 @@ public class FieldInfo {
         this.uncapitType = type.substring(0, 1).toLowerCase() + type.substring(1);
     }
 
-    public FieldInfo(String name, String type, boolean collection, boolean link) {
-        super();
-        this.name = name;
-        this.capitName = name.substring(0, 1).toUpperCase() + name.substring(1);
-        this.type = parse(type);
-        this.collection = collection;
-        this.link = link;
-        this.uncapitType = type.substring(0, 1).toLowerCase() + type.substring(1);
-    }
-
-    private String parse(String type) {
-        switch (TaString.getType(type)) {
-            case bigint:
-                return "long";
-            case varchar:
-                return "String";
-            case datetime:
-                return "Date";
-            case tinyint:
-                return "String";
-            default:
-                return "String";
-        }
-    }
 
     public String getName() {
         return name;
@@ -223,5 +200,13 @@ public class FieldInfo {
 
     public void setOrder(int order) {
         this.order = order;
+    }
+
+    public InputType getInputType() {
+        return inputType;
+    }
+
+    public void setInputType(InputType inputType) {
+        this.inputType = inputType;
     }
 }
