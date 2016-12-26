@@ -4,23 +4,9 @@
     <parent>
         <groupId>com.ly.ta</groupId>
         <artifactId>ta-crud</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.3</version>
     </parent>
     <artifactId>crud-web-generator</artifactId>
-    <version>1.0.0</version>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
     <packaging>jar</packaging>
     <name>Travel Ancillary Web CRUD</name>
     <url>http://maven.apache.org</url>
@@ -45,4 +31,17 @@
             <version>5.1.38</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

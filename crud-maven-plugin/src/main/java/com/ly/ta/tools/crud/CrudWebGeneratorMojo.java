@@ -1,4 +1,4 @@
-package com.octo.tools.crud;
+package com.ly.ta.tools.crud;
 
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
@@ -33,25 +33,25 @@ public class CrudWebGeneratorMojo extends AbstractMojo {
     /**
      * Name of the persistent unit defined in the persistence.xml
      */
-    @Parameter(property = "persistentUnitName", required = true)
-    private String persistentUnitName;
+    @Parameter(property = "doClassName", required = true)
+    private String doClassName;
+
+    @Parameter(property = "templateDirectory", required = false)
+    private String templateDirectory;
 
     /**
      * Location of the generated files
      */
-    @Parameter(defaultValue = "${project.build.directory}/classes/static/admin", property = "outputDir", required = false)
+    @Parameter(defaultValue = "${project.build.directory}", property = "outputDir", required = false)
     private String outputDirectory;
 
-    /**
-     * URL of the Rest API
-     */
-    @Parameter(property = "restApiUrl", required = true)
-    private String restApiUrl;
 
     public void execute() throws MojoExecutionException {
-
+        System.out.println(String.format("##############%s---%s", doClassName, outputDirectory));
         try {
-            new CrudGenerator().generate(persistentUnitName, outputDirectory, restApiUrl);
+            CrudGenerator crud = new CrudGenerator();
+            crud.setResourcesDir(templateDirectory);
+            crud.generate(doClassName, outputDirectory);
         } catch (Exception e) {
             throw new MojoExecutionException("Exception during generation", e);
         }

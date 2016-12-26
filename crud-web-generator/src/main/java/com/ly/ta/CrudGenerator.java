@@ -2,7 +2,6 @@ package com.ly.ta;
 
 import com.ly.ta.annotation.TaCrud;
 import com.ly.ta.annotation.TaCrudInfo;
-import com.ly.ta.form.TaAdminUserDO;
 import com.ly.ta.tool.JdbcUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -26,23 +25,31 @@ import java.util.*;
 
 public class CrudGenerator {
 
-    //    private String         resourcesDir = "./";
-    private String         resourcesDir = "./crud-web-generator/src/main/resources/";
+    private String         resourcesDir = "./";
+    //    private String         resourcesDir = "./crud-web-generator/src/main/resources/";
 
     private VelocityEngine ve;
 
     private String         restUrl;
 
-    public void generate(String tableName, String destDirRelativePath, String restUrl) throws Exception {
+    public void generate(String className, String destDirRelativePath) throws Exception {
 
         //		EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnitName);
         //		EntityManager em = emf.createEntityManager();
 
         this.ve = new VelocityEngine();
-
-        this.restUrl = restUrl;
-
-        List<Map<String, Object>> entities = initPersistenceInfo(TaAdminUserDO.class);
+        Class clazz = null;
+        try {
+            clazz = Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        List<Map<String, Object>> entities = null;
+        try {
+            entities = initPersistenceInfo(clazz);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         File root = new File(destDirRelativePath);
         root.delete();
@@ -53,6 +60,8 @@ public class CrudGenerator {
         prop.setProperty(Velocity.ENCODING_DEFAULT, "UTF-8");
         prop.setProperty(Velocity.INPUT_ENCODING, "UTF-8");
         prop.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
+        ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+        ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
         ve.init(prop);
 
         //        generateAppAndSrvJS(ve, entities, root);
@@ -103,16 +112,23 @@ public class CrudGenerator {
     }
 
     private String getResourceFile(String relativePath) throws URISyntaxException {
-        File f = new File(resourcesDir + "templates/" + relativePath);
-        if (f.exists() && f.isFile())
-            return f.getPath();
-        else
+//        java.net.URL fileUrl = this.getClass().getResource("/templates/" + relativePath);
+//        File f = null;
+//        try {
+//            f = new File(fileUrl.toURI());
+//        } catch (Exception e) {
+//            f = new File(fileUrl.getPath());
+//        }
+//        if (f.exists() && f.isFile())
+//            return f.getPath();
+//        else
             return "templates/" + relativePath;
     }
 
     private void generateJSP(VelocityEngine ve, List<Map<String, Object>> entities, File root) throws IOException, ResourceNotFoundException, ParseErrorException,
                                                                                                URISyntaxException {
         File partials = new File(root, "partials");
+
         if (!partials.exists())
             partials.mkdir();
 
@@ -129,7 +145,7 @@ public class CrudGenerator {
             context.put("commandName", map.get("commandName"));
             Path path = Paths.get(dir.getPath(), name.toLowerCase() + "_form.jsp");
             if (org.apache.commons.lang.StringUtils.isNotEmpty((String) map.get("viewName"))) {
-                path = Paths.get(dir.getPath(), "edit"+map.get("viewName") + ".jsp");
+                path = Paths.get(dir.getPath(), "edit" + map.get("viewName") + ".jsp");
             }
             //
             System.out.println("File " + path);
@@ -139,7 +155,7 @@ public class CrudGenerator {
             //
             path = Paths.get(dir.getPath(), name.toLowerCase() + "_list.jsp");
             if (org.apache.commons.lang.StringUtils.isNotEmpty((String) map.get("viewName"))) {
-                path = Paths.get(dir.getPath(), "show"+map.get("viewName") + ".jsp");
+                path = Paths.get(dir.getPath(), "show" + map.get("viewName") + ".jsp");
             }
             System.out.println("File " + path);
             writer = Files.newBufferedWriter(path);
@@ -196,7 +212,7 @@ public class CrudGenerator {
         }
         commandName = StringUtils.camelName(commandName);
         Map<String, Object> entityInfo;
-        List<Map<String, Object>> entities = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> entities = new ArrayList<>();
         {
             entityInfo = new HashMap<>();
             entities.add(entityInfo);
@@ -222,6 +238,7 @@ public class CrudGenerator {
      * @throws ClassNotFoundException
      */
     private List<Map<String, Object>> initPersistenceInfo(Class clazz) throws ClassNotFoundException {
+        System.out.println("$$$$$$$ " + clazz.getSimpleName());
         Map<String, Object> entityInfo;
         List<Map<String, Object>> entities = new ArrayList<>();
         //        Class clazz = target.getClass();
@@ -263,6 +280,11 @@ public class CrudGenerator {
         }
         //
         Collections.sort(entities, (p1, p2) -> ((String) p1.get("name")).compareTo((String) p2.get("name")));
+        System.out.println("$$$$$$$2: " + clazz.getSimpleName());
         return entities;
+    }
+
+    public void setResourcesDir(String resourcesDir) {
+        this.resourcesDir = resourcesDir;
     }
 }

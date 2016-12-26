@@ -90,7 +90,7 @@ public class JdbcUtils {
         // TODO Auto-generated method stub
 
         try {
-            new CrudGenerator().generate("ta_admin_user", "/Users/colingo/Documents/data/", "");
+            new CrudGenerator().generate("ta_admin_user", "/Users/colingo/Documents/data/");
         } catch (Exception e) {
             e.printStackTrace();
         }
