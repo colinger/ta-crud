@@ -48,28 +48,32 @@ pageEncoding="UTF-8" %>
                     #foreach( $info in ${entity.info} )
                         #if(${info.inputType.name()} == "INPUT")
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">${info.label} #if(${info.required})<span class="required">*</span>#end<</label>
+                                <label class="col-sm-3 control-label">${info.label} #if(${info.required})<span
+                                        class="required">*</span>#end</label>
                                 <div class="col-sm-3">
                                     <form:input path="${info.name}" id="${info.idTag}" cssClass="form-control"
                                                 autocomplete="false"/>
                                 </div>
                                 <div class="col-sm-4">
-                                    <label class="control-label"> <span class="required">${info.description} </span></label>
+                                    <label class="control-label"> <span
+                                            class="required">${info.description} </span></label>
                                 </div>
                             </div>
                         #elseif(${info.inputType.name()} == "RADIO")
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">${info.label} <span class="required">*</span></label>
+                                <label class="col-sm-3 control-label">${info.label} <span
+                                        class="required">*</span></label>
                                 <div class="col-sm-7">
                                     <c:forEach items="${webUtil.getScopeAllMap()}" var="radioMap">
                                         <label class="form-control-opt" id="">
-                                            <form:radiobutton path="${info.name}" value="${radioMap.key}" id=""
-                                                              onclick="alert('XX');"/>${radioMap.value}
+                                            <form:radiobutton path="${info.name}" value="${radioMap.key}"
+                                                              id=""/>${radioMap.value}
                                         </label>
                                     </c:forEach>
                                 </div>
                                 <div class="col-sm-4">
-                                    <label class="control-label"> <span class="required">${info.description} </span></label>
+                                    <label class="control-label"> <span
+                                            class="required">${info.description} </span></label>
                                 </div>
                             </div>
                         #elseif(${info.inputType.name} == "CHECKBOX")
