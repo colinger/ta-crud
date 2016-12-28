@@ -59,7 +59,7 @@ pageEncoding="UTF-8" %>
                             </div>
                         #elseif(${info.inputType.name()} == "RADIO")
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">适用范围 <span class="required">*</span></label>
+                                <label class="col-sm-3 control-label">${info.label} <span class="required">*</span></label>
                                 <div class="col-sm-7">
                                     <c:forEach items="${webUtil.getScopeAllMap()}" var="radioMap">
                                         <label class="form-control-opt" id="">

@@ -50,14 +50,15 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>octo</id>
-            <name>Octo Nexus</name>
-            <url>https://cloud2.octo.com/nexus/content/repositories/snapshots</url>
+            <id>nexus-snapshots</id>
+            <name>nexus-snapshots</name>
+            <url>http://10.100.156.237:8081/nexus/content/repositories/snapshots</url>
+            <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
         <repository>
-            <id>octo</id>
-            <name>Octo Nexus</name>
-            <url>https://cloud2.octo.com/nexus/content/repositories/releases/</url>
+            <id>nexus-releases</id>
+            <name>nexus-releases</name>
+            <url>http://10.100.156.237:8081/nexus/content/repositories/releases</url>
         </repository>
     </distributionManagement>
 </project>
